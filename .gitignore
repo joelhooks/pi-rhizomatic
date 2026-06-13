@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+.agent-sources/
+.rhizomatic/
+*.log
+.DS_Store

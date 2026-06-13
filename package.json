@@ -1,0 +1,72 @@
+{
+  "name": "pi-rhizomatic",
+  "version": "0.1.0",
+  "description": "Native Pi memory surface and portable HTTP contract for Rhizomatic agent memory.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Joel Hooks",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joelhooks/pi-rhizomatic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/joelhooks/pi-rhizomatic/issues"
+  },
+  "homepage": "https://github.com/joelhooks/pi-rhizomatic#readme",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "rhizomatic",
+    "agent-memory",
+    "effect",
+    "openapi"
+  ],
+  "bin": {
+    "pi-rhizomatic": "./src/bin.ts"
+  },
+  "files": [
+    "src",
+    "extensions",
+    "skills",
+    "schemas",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "check": "tsc --noEmit && vitest run test/schema.test.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run test/schema.test.ts",
+    "openapi": "tsx src/bin.ts openapi --out schemas/rhizomatic.openapi.json",
+    "serve": "tsx src/bin.ts serve --store ./.rhizomatic/canary.jsonl",
+    "canary:local": "tsx src/canary.ts",
+    "pack:dry": "npm pack --dry-run"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/pi-rhizomatic.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "dependencies": {
+    "@effect/platform": "latest",
+    "@effect/platform-node": "latest",
+    "effect": "latest"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typebox": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "packageManager": "npm@11.6.2"
+}

@@ -1,0 +1,1624 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Rhizomatic Service Contract",
+    "version": "0.1.0",
+    "description": "Portable HTTP JSON contract for Rhizomatic agent memory primitives. Auth, hosting, and storage are deployment choices.",
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:7331",
+      "description": "Local reference service"
+    }
+  ],
+  "tags": [
+    {
+      "name": "primitives",
+      "description": "Rhizomatic memory primitives"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Check service health",
+        "responses": {
+          "200": {
+            "description": "Service health",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contract": {
+      "get": {
+        "operationId": "contract",
+        "summary": "Return contract metadata and capabilities",
+        "responses": {
+          "200": {
+            "description": "Contract metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "operationId": "openapi",
+        "summary": "Return generated OpenAPI schema",
+        "responses": {
+          "200": {
+            "description": "OpenAPI 3.1 schema",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v0/tools/begin-session": {
+      "post": {
+        "operationId": "begin_session",
+        "summary": "Execute Rhizomatic primitive begin-session",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BeginSessionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/whoami": {
+      "post": {
+        "operationId": "whoami",
+        "summary": "Execute Rhizomatic primitive whoami",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WhoamiInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/briefing": {
+      "post": {
+        "operationId": "briefing",
+        "summary": "Execute Rhizomatic primitive briefing",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BriefingInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/remember": {
+      "post": {
+        "operationId": "remember",
+        "summary": "Execute Rhizomatic primitive remember",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RememberInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/recall": {
+      "post": {
+        "operationId": "recall",
+        "summary": "Execute Rhizomatic primitive recall",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecallInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/topics": {
+      "post": {
+        "operationId": "topics",
+        "summary": "Execute Rhizomatic primitive topics",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TopicsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/search": {
+      "post": {
+        "operationId": "search",
+        "summary": "Execute Rhizomatic primitive search",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/same": {
+      "post": {
+        "operationId": "same",
+        "summary": "Execute Rhizomatic primitive same",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SameInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/retract": {
+      "post": {
+        "operationId": "retract",
+        "summary": "Execute Rhizomatic primitive retract",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetractInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/revise": {
+      "post": {
+        "operationId": "revise",
+        "summary": "Execute Rhizomatic primitive revise",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviseInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/recast": {
+      "post": {
+        "operationId": "recast",
+        "summary": "Execute Rhizomatic primitive recast",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecastInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/end-session": {
+      "post": {
+        "operationId": "end_session",
+        "summary": "Execute Rhizomatic primitive end-session",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EndSessionInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/post": {
+      "post": {
+        "operationId": "post",
+        "summary": "Execute Rhizomatic primitive post",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/inbox": {
+      "post": {
+        "operationId": "inbox",
+        "summary": "Execute Rhizomatic primitive inbox",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InboxInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/ack": {
+      "post": {
+        "operationId": "ack",
+        "summary": "Execute Rhizomatic primitive ack",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AckInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/decide": {
+      "post": {
+        "operationId": "decide",
+        "summary": "Execute Rhizomatic primitive decide",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DecideInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/replay": {
+      "post": {
+        "operationId": "replay",
+        "summary": "Execute Rhizomatic primitive replay",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplayInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/explain": {
+      "post": {
+        "operationId": "explain",
+        "summary": "Execute Rhizomatic primitive explain",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExplainInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/trust": {
+      "post": {
+        "operationId": "trust",
+        "summary": "Execute Rhizomatic primitive trust",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TrustInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v0/tools/as-of": {
+      "post": {
+        "operationId": "as_of",
+        "summary": "Execute Rhizomatic primitive as-of",
+        "tags": [
+          "primitives"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AsOfInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Primitive result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToolResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Unknown primitive"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "ToolResponse": {
+        "$defs": {
+          "ToolResponse": {
+            "type": "object",
+            "required": [
+              "ok"
+            ],
+            "properties": {
+              "ok": {
+                "type": "boolean"
+              },
+              "data": {
+                "$id": "/schemas/unknown",
+                "title": "unknown"
+              },
+              "error": {
+                "$ref": "#/$defs/ErrorBody"
+              },
+              "receipt": {
+                "$ref": "#/$defs/Receipt"
+              },
+              "_links": {
+                "type": "object",
+                "required": [],
+                "properties": {},
+                "additionalProperties": {
+                  "$id": "/schemas/unknown",
+                  "title": "unknown"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "ErrorBody": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "$id": "/schemas/unknown",
+                "title": "unknown"
+              }
+            },
+            "additionalProperties": false
+          },
+          "Receipt": {
+            "type": "object",
+            "required": [
+              "service",
+              "contractVersion",
+              "primitive",
+              "timestamp"
+            ],
+            "properties": {
+              "service": {
+                "type": "string"
+              },
+              "contractVersion": {
+                "type": "string"
+              },
+              "primitive": {
+                "$ref": "#/$defs/PrimitiveName"
+              },
+              "eventId": {
+                "type": "string"
+              },
+              "sessionId": {
+                "type": "string"
+              },
+              "runtime": {
+                "$ref": "#/$defs/RuntimeName"
+              },
+              "store": {
+                "type": "string"
+              },
+              "timestamp": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "PrimitiveName": {
+            "type": "string",
+            "enum": [
+              "begin-session",
+              "whoami",
+              "briefing",
+              "remember",
+              "recall",
+              "topics",
+              "search",
+              "same",
+              "retract",
+              "revise",
+              "recast",
+              "end-session",
+              "post",
+              "inbox",
+              "ack",
+              "decide",
+              "replay",
+              "explain",
+              "trust",
+              "as-of"
+            ],
+            "description": "Rhizomatic primitive exposed over the HTTP service contract."
+          },
+          "RuntimeName": {
+            "type": "string",
+            "enum": [
+              "pi",
+              "claude",
+              "codex",
+              "other"
+            ]
+          }
+        },
+        "$ref": "#/$defs/ToolResponse"
+      },
+      "BeginSessionInput": {
+        "$defs": {
+          "BeginSessionInput": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "model": {
+                "type": "string"
+              },
+              "purpose": {
+                "type": "string"
+              },
+              "topics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "surface": {
+                "type": "string"
+              },
+              "mode": {
+                "type": "string"
+              },
+              "runtime": {
+                "$ref": "#/$defs/RuntimeName"
+              },
+              "runtimeSessionId": {
+                "type": "string"
+              },
+              "idempotencyKey": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "RuntimeName": {
+            "type": "string",
+            "enum": [
+              "pi",
+              "claude",
+              "codex",
+              "other"
+            ]
+          }
+        },
+        "$ref": "#/$defs/BeginSessionInput"
+      },
+      "WhoamiInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "BriefingInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "RememberInput": {
+        "$defs": {
+          "RememberInput": {
+            "type": "object",
+            "required": [
+              "about",
+              "attribute",
+              "value"
+            ],
+            "properties": {
+              "about": {
+                "type": "string"
+              },
+              "attribute": {
+                "type": "string"
+              },
+              "value": {
+                "$ref": "#/$defs/BeliefValue"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "fact",
+                  "preference",
+                  "task",
+                  "summary",
+                  "canary"
+                ]
+              },
+              "speaker": {
+                "type": "string",
+                "enum": [
+                  "model",
+                  "user"
+                ]
+              },
+              "reason": {
+                "type": "string"
+              },
+              "idempotencyKey": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "BeliefValue": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/JsonPrimitive"
+              },
+              {
+                "$ref": "#/$defs/EntityRef"
+              }
+            ],
+            "description": "Primitive terminal content or an entity reference."
+          },
+          "JsonPrimitive": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "EntityRef": {
+            "type": "object",
+            "required": [
+              "entity"
+            ],
+            "properties": {
+              "entity": {
+                "type": "string"
+              },
+              "context": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "description": "Typed reference to an entity the store can hold beliefs about."
+          }
+        },
+        "$ref": "#/$defs/RememberInput"
+      },
+      "RecallInput": {
+        "$defs": {
+          "RecallInput": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "about": {
+                "type": "string"
+              },
+              "attribute": {
+                "type": "string"
+              },
+              "query": {
+                "type": "string"
+              },
+              "all": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$ref": "#/$defs/RecallInput"
+      },
+      "TopicsInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "SearchInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "SameInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "RetractInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "ReviseInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "RecastInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "EndSessionInput": {
+        "$defs": {
+          "EndSessionInput": {
+            "type": "object",
+            "required": [],
+            "properties": {
+              "summary": {
+                "type": "string"
+              },
+              "idempotencyKey": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$ref": "#/$defs/EndSessionInput"
+      },
+      "PostInput": {
+        "$defs": {
+          "PostInput": {
+            "type": "object",
+            "required": [
+              "body"
+            ],
+            "properties": {
+              "body": {
+                "type": "string"
+              },
+              "to": {
+                "type": "object",
+                "required": [],
+                "properties": {},
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "about": {
+                "type": "string"
+              },
+              "re": {
+                "type": "string"
+              },
+              "idempotencyKey": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$ref": "#/$defs/PostInput"
+      },
+      "InboxInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "AckInput": {
+        "$defs": {
+          "AckInput": {
+            "type": "object",
+            "required": [
+              "messageId"
+            ],
+            "properties": {
+              "messageId": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              },
+              "idempotencyKey": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "$ref": "#/$defs/AckInput"
+      },
+      "DecideInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "ReplayInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "ExplainInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "TrustInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      },
+      "AsOfInput": {
+        "$defs": {
+          "GenericPrimitiveInput": {
+            "type": "object",
+            "required": [],
+            "properties": {},
+            "additionalProperties": {
+              "$id": "/schemas/unknown",
+              "title": "unknown"
+            },
+            "description": "Generic object payload for experimental primitives not yet narrowed in the public contract."
+          }
+        },
+        "$ref": "#/$defs/GenericPrimitiveInput"
+      }
+    }
+  }
+}
