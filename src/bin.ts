@@ -3,6 +3,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { RhizomaticClient } from "./client.js";
 import { runLocalCanary, runNetworkCanary } from "./canary.js";
+import { installCodexHooks } from "./codex-install.js";
 import { configPaths, resolveConfig } from "./config.js";
 import { readStdinJson, runSessionStartHook, runStopHook, type Runtime } from "./hooks.js";
 import { makeOpenApi } from "./openapi.js";
@@ -23,7 +24,7 @@ function print(value: unknown) {
 }
 
 function usage() {
-  process.stdout.write(`pi-rhizomatic\n\nCommands:\n  init [--write] [--service-url URL] [--backend rhizomatic-http|chorus-http] [--token-env NAME]\n  serve [--store PATH] [--host 127.0.0.1] [--port 7331]\n  openapi [--out PATH]\n  health\n  contract\n  call <primitive> [--json '{...}']\n  hook session-start --runtime pi|claude|codex\n  hook stop --runtime pi|claude|codex\n  canary [--local] [--label LABEL]\n  drain\n\n`);
+  process.stdout.write(`pi-rhizomatic\n\nCommands:\n  init [--write] [--service-url URL] [--backend rhizomatic-http|chorus-http] [--token-env NAME]\n  install-codex-hooks [--write] [--target-dir PATH] [--package PATH]\n  serve [--store PATH] [--host 127.0.0.1] [--port 7331]\n  openapi [--out PATH]\n  health\n  contract\n  call <primitive> [--json '{...}']\n  hook session-start --runtime pi|claude|codex\n  hook stop --runtime pi|claude|codex\n  canary [--local] [--label LABEL]\n  drain\n\n`);
 }
 
 async function main() {
@@ -69,6 +70,17 @@ async function main() {
     return;
   }
 
+  if (command === "install-codex-hooks") {
+    print(
+      installCodexHooks({
+        write: has("--write"),
+        targetDir: arg("--target-dir"),
+        packagePath: arg("--package"),
+      }),
+    );
+    return;
+  }
+
   if (command === "init") {
     const paths = configPaths();
     const serviceUrl = arg("--service-url", process.env.RHIZOMATIC_SERVICE_URL ?? "http://127.0.0.1:7331");
@@ -90,7 +102,7 @@ async function main() {
       proposed,
       notes: [
         "No files changed unless --write is passed.",
-        "Claude/Codex hook installation is intentionally preview-only in v0; copy commands from the README or private overlays.",
+        "Use install-codex-hooks --write to install strict fail-open Codex wrapper scripts.",
       ],
     };
     if (has("--write") && target) {

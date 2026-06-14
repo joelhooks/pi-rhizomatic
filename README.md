@@ -124,7 +124,16 @@ pi-rhizomatic hook session-start --runtime codex
 pi-rhizomatic hook stop --runtime codex
 ```
 
-Private deployments decide where to install those hooks and which endpoint/store they use.
+Codex rejects unknown top-level hook fields, so use the package-owned wrapper scripts instead of pointing Codex directly at ad-hoc local commands:
+
+```bash
+pi-rhizomatic install-codex-hooks
+pi-rhizomatic install-codex-hooks --write
+```
+
+This writes strict, fail-open wrappers to `~/.config/rhizomatic/hooks/` and prints the `bash ...` commands to reference from `~/.codex/hooks.json`. It does not mutate `~/.codex/hooks.json`.
+
+Private deployments decide which endpoint/store they use.
 
 ## Pi commands
 

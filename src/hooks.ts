@@ -17,37 +17,58 @@ export function readStdinJson(): Record<string, unknown> {
   }
 }
 
-export async function runSessionStartHook(runtime: Runtime, hookInput: Record<string, unknown>) {
-  const client = RhizomaticClient.fromCwd(typeof hookInput.cwd === "string" ? hookInput.cwd : process.cwd());
-  const runtimeSessionId = stableSessionId(runtime, hookInput);
-  const idempotencyKey = `${runtimeSessionId}:session-start`;
-  const begin = await client.call(
-    "begin-session",
-    {
-      runtime,
-      runtimeSessionId,
-      cwd: hookInput.cwd,
-      model: hookInput.model,
-      surface: runtime,
-      purpose: `Automatic ${runtime} session start`,
-      idempotencyKey,
-    },
-    { queueOnFailure: true },
-  );
+export interface SessionStartHookOutput {
+  readonly hookSpecificOutput: {
+    readonly hookEventName: "SessionStart";
+    readonly additionalContext: string;
+  };
+}
 
+export interface StopHookOutput {
+  readonly continue?: boolean;
+  readonly stopReason?: string;
+  readonly suppressOutput?: boolean;
+  readonly systemMessage?: string;
+  readonly decision?: "block";
+  readonly reason?: string;
+}
+
+function errorMessage(error: unknown) {
+  return error instanceof Error ? error.message : String(error);
+}
+
+export async function runSessionStartHook(runtime: Runtime, hookInput: Record<string, unknown>): Promise<SessionStartHookOutput> {
   let briefingText = "Rhizomatic briefing unavailable.";
+
   try {
-    const briefing = await client.call("briefing", { runtime, runtimeSessionId });
-    briefingText = JSON.stringify(briefing.data ?? {}, null, 2);
+    const client = RhizomaticClient.fromCwd(typeof hookInput.cwd === "string" ? hookInput.cwd : process.cwd());
+    const runtimeSessionId = stableSessionId(runtime, hookInput);
+    const idempotencyKey = `${runtimeSessionId}:session-start`;
+    await client.call(
+      "begin-session",
+      {
+        runtime,
+        runtimeSessionId,
+        cwd: hookInput.cwd,
+        model: hookInput.model,
+        surface: runtime,
+        purpose: `Automatic ${runtime} session start`,
+        idempotencyKey,
+      },
+      { queueOnFailure: true },
+    );
+
+    try {
+      const briefing = await client.call("briefing", { runtime, runtimeSessionId });
+      briefingText = JSON.stringify(briefing.data ?? {}, null, 2);
+    } catch (error) {
+      briefingText = `Rhizomatic briefing unavailable: ${errorMessage(error)}`;
+    }
   } catch (error) {
-    briefingText = `Rhizomatic briefing unavailable: ${error instanceof Error ? error.message : String(error)}`;
+    briefingText = `Rhizomatic briefing unavailable: ${errorMessage(error)}`;
   }
 
   return {
-    ok: begin.ok,
-    runtime,
-    runtimeSessionId,
-    rhizomatic: { begin, briefing: briefingText },
     hookSpecificOutput: {
       hookEventName: "SessionStart",
       additionalContext: `Rhizomatic briefing:\n${briefingText}`,
@@ -55,19 +76,25 @@ export async function runSessionStartHook(runtime: Runtime, hookInput: Record<st
   };
 }
 
-export async function runStopHook(runtime: Runtime, hookInput: Record<string, unknown>) {
-  const client = RhizomaticClient.fromCwd(typeof hookInput.cwd === "string" ? hookInput.cwd : process.cwd());
-  const runtimeSessionId = stableSessionId(runtime, hookInput);
-  const summary = typeof hookInput.summary === "string" ? hookInput.summary : `Automatic ${runtime} session end`;
-  const result = await client.call(
-    "end-session",
-    {
-      runtime,
-      runtimeSessionId,
-      summary,
-      idempotencyKey: `${runtimeSessionId}:stop`,
-    },
-    { queueOnFailure: true },
-  );
-  return { ok: result.ok, runtime, runtimeSessionId, rhizomatic: result };
+export async function runStopHook(runtime: Runtime, hookInput: Record<string, unknown>): Promise<StopHookOutput> {
+  try {
+    const client = RhizomaticClient.fromCwd(typeof hookInput.cwd === "string" ? hookInput.cwd : process.cwd());
+    const runtimeSessionId = stableSessionId(runtime, hookInput);
+    const summary = typeof hookInput.summary === "string" ? hookInput.summary : `Automatic ${runtime} session end`;
+    await client.call(
+      "end-session",
+      {
+        runtime,
+        runtimeSessionId,
+        summary,
+        idempotencyKey: `${runtimeSessionId}:stop`,
+      },
+      { queueOnFailure: true },
+    );
+  } catch {
+    // Codex rejects unknown Stop fields and treats non-zero hook exits as hook failures.
+    // Preserve the host runtime's happy path; Rhizomatic diagnostics belong in stderr/logs, not hook JSON.
+  }
+
+  return {};
 }
