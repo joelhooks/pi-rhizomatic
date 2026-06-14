@@ -4,9 +4,15 @@ Native Pi memory surface and portable HTTP contract for Rhizomatic agent memory.
 
 This package is intentionally **not** tied to one deployment. The package owns the contract and client/runtime surfaces; any HTTP service that conforms to the contract can back it.
 
+## Credit and provenance
+
+The Rhizomatic idea, substrate, and Chorus agent-memory application come from **Myk Bilokonsky's [`mbilokonsky/rhizomatic`](https://github.com/mbilokonsky/rhizomatic)**. Go read that first if you want the actual theory, spec work, witnesses, conformance vectors, and Chorus implementation.
+
+This repo is a Pi/client adapter and network-canary harness built from scratch around Joel's agent runtimes. It does **not** vendor Myk's code, spec text, conformance vectors, or Chorus implementation. If this project grows toward real substrate compatibility, the next step is explicit upstream alignment and permission/license review instead of casually copying the goods. 🧾
+
 ## What ships in v0
 
-- Pi extension with first-class `rhizomatic_*` tools for all Rhizomatic/Chorus primitives
+- Pi extension with first-class `rhizomatic_*` tools for a Rhizomatic-inspired agent-memory primitive set
 - Effect-authored schemas for the Rhizomatic Service Contract
 - generated OpenAPI (`pi-rhizomatic openapi`)
 - HTTP client helpers and config loading
