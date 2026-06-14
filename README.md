@@ -76,7 +76,7 @@ pi-rhizomatic call begin-session --json '{"runtime":"pi","runtimeSessionId":"dem
 pi-rhizomatic call remember --json '{"about":"canary:pi","attribute":"status","value":"seen","kind":"canary"}'
 pi-rhizomatic call recall --json '{"query":"canary"}'
 pi-rhizomatic canary --local
-pi-rhizomatic canary --label canary:flagg-001
+pi-rhizomatic canary --label canary:network-001
 pi-rhizomatic drain
 ```
 
