@@ -25,6 +25,8 @@ export async function runNetworkCanary(client: RhizomaticClient, label = `canary
     await client.call("begin-session", { runtime, runtimeSessionId, purpose: `${runtime} ${label}`, idempotencyKey: `${runtimeSessionId}:begin` });
     await client.call("briefing", { runtime, runtimeSessionId });
     await client.call("remember", {
+      runtime,
+      runtimeSessionId,
       about: `${label}:${runtime}`,
       attribute: "status",
       value: "seen",
@@ -49,7 +51,7 @@ export async function runLocalCanary(label = "canary:local") {
   const dir = mkdtempSync(join(tmpdir(), "pi-rhizomatic-canary-"));
   const storePath = join(dir, "store.jsonl");
   const service = await startReferenceService({ storePath, host: "127.0.0.1", port: 0 });
-  const client = new RhizomaticClient({ serviceUrl: service.url, outboxDir: join(dir, "outbox"), sources: ["canary"] });
+  const client = new RhizomaticClient({ serviceUrl: service.url, backend: "rhizomatic-http", outboxDir: join(dir, "outbox"), sessionDir: join(dir, "mcp-sessions"), sources: ["canary"] });
 
   try {
     const result = await runNetworkCanary(client, label);

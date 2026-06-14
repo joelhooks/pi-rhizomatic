@@ -34,9 +34,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "check": "tsc --noEmit && vitest run test/schema.test.ts",
+    "check": "tsc --noEmit && vitest run",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run test/schema.test.ts",
+    "test": "vitest run",
     "openapi": "tsx src/bin.ts openapi --out schemas/rhizomatic.openapi.json",
     "serve": "tsx src/bin.ts serve --store ./.rhizomatic/canary.jsonl",
     "canary:local": "tsx src/canary.ts",

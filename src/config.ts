@@ -6,9 +6,11 @@ import { ConfigFile } from "./schema.js";
 
 export interface ResolvedConfig {
   readonly serviceUrl?: string;
+  readonly backend: "rhizomatic-http" | "chorus-http";
   readonly token?: string;
   readonly tokenSource?: string;
   readonly outboxDir: string;
+  readonly sessionDir: string;
   readonly sources: readonly string[];
 }
 
@@ -76,11 +78,16 @@ export function resolveConfig(cwd = process.cwd(), env: NodeJS.ProcessEnv = proc
   if (directToken) sources.push("env:RHIZOMATIC_TOKEN");
   if (tokenFromNamedEnv && tokenEnvName) sources.push(`env:${tokenEnvName}`);
 
+  const backend = env.RHIZOMATIC_BACKEND ?? merged.backend ?? "rhizomatic-http";
+  if (backend !== "rhizomatic-http" && backend !== "chorus-http") throw new Error(`Unknown RHIZOMATIC_BACKEND: ${backend}`);
+
   return {
     serviceUrl,
+    backend,
     token,
     tokenSource,
     outboxDir: env.RHIZOMATIC_OUTBOX_DIR ?? merged.outboxDir ?? join(homedir(), ".rhizomatic", "outbox"),
+    sessionDir: env.RHIZOMATIC_SESSION_DIR ?? merged.sessionDir ?? join(homedir(), ".rhizomatic", "mcp-sessions"),
     sources,
   };
 }
@@ -93,7 +100,7 @@ export function notConfiguredMessage(config = resolveConfig()): string {
     `- ${paths.project ?? "<project>/.pi/rhizomatic.json"}`,
     `- ${paths.user}`,
     `- ${paths.xdg}`,
-    "Example: { \"serviceUrl\": \"http://127.0.0.1:7331\", \"tokenEnv\": \"RHIZOMATIC_TOKEN\" }",
+    "Example: { \"serviceUrl\": \"http://127.0.0.1:4821/mcp\", \"backend\": \"chorus-http\", \"tokenEnv\": \"RHIZOMATIC_TOKEN\" }",
     `Config sources checked: ${config.sources.length ? config.sources.join(", ") : "none"}`,
   ].join("\n");
 }

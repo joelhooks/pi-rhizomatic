@@ -23,7 +23,7 @@ function print(value: unknown) {
 }
 
 function usage() {
-  process.stdout.write(`pi-rhizomatic\n\nCommands:\n  init [--write] [--service-url URL] [--token-env NAME]\n  serve [--store PATH] [--host 127.0.0.1] [--port 7331]\n  openapi [--out PATH]\n  health\n  contract\n  call <primitive> [--json '{...}']\n  hook session-start --runtime pi|claude|codex\n  hook stop --runtime pi|claude|codex\n  canary [--local] [--label LABEL]\n  drain\n\n`);
+  process.stdout.write(`pi-rhizomatic\n\nCommands:\n  init [--write] [--service-url URL] [--backend rhizomatic-http|chorus-http] [--token-env NAME]\n  serve [--store PATH] [--host 127.0.0.1] [--port 7331]\n  openapi [--out PATH]\n  health\n  contract\n  call <primitive> [--json '{...}']\n  hook session-start --runtime pi|claude|codex\n  hook stop --runtime pi|claude|codex\n  canary [--local] [--label LABEL]\n  drain\n\n`);
 }
 
 async function main() {
@@ -72,12 +72,15 @@ async function main() {
   if (command === "init") {
     const paths = configPaths();
     const serviceUrl = arg("--service-url", process.env.RHIZOMATIC_SERVICE_URL ?? "http://127.0.0.1:7331");
+    const backend = arg("--backend", process.env.RHIZOMATIC_BACKEND ?? "rhizomatic-http");
     const tokenEnv = arg("--token-env", "RHIZOMATIC_TOKEN");
     const target = arg("--config", paths.user);
     const proposed = {
       serviceUrl,
+      backend,
       tokenEnv,
       outboxDir: "~/.rhizomatic/outbox",
+      sessionDir: "~/.rhizomatic/mcp-sessions",
     };
     const preview = {
       ok: true,

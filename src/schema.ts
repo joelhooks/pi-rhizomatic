@@ -78,7 +78,7 @@ export const RememberInput = Schema.Struct({
   about: Schema.String,
   attribute: Schema.String,
   value: BeliefValue,
-  kind: Schema.optional(Schema.Literal("fact", "preference", "task", "summary", "canary")),
+  kind: Schema.optional(Schema.Literal("observation", "fact", "preference", "task", "summary", "canary")),
   speaker: Schema.optional(Schema.Literal("model", "user")),
   reason: Schema.optional(Schema.String),
   idempotencyKey: Schema.optional(Schema.String),
@@ -170,9 +170,11 @@ export type ToolResponse = typeof ToolResponse.Type;
 
 export const ConfigFile = Schema.Struct({
   serviceUrl: Schema.optional(Schema.String),
+  backend: Schema.optional(Schema.Literal("rhizomatic-http", "chorus-http")),
   tokenEnv: Schema.optional(Schema.String),
   tokenSecretName: Schema.optional(Schema.String),
   outboxDir: Schema.optional(Schema.String),
+  sessionDir: Schema.optional(Schema.String),
 }).annotations({ identifier: "ConfigFile" });
 export type ConfigFile = typeof ConfigFile.Type;
 

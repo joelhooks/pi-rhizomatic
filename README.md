@@ -8,15 +8,16 @@ This package is intentionally **not** tied to one deployment. The package owns t
 
 The Rhizomatic idea, substrate, and Chorus agent-memory application come from **Myk Bilokonsky's [`mbilokonsky/rhizomatic`](https://github.com/mbilokonsky/rhizomatic)**. Go read that first if you want the actual theory, spec work, witnesses, conformance vectors, and Chorus implementation.
 
-This repo is a Pi/client adapter and network-canary harness built from scratch around Joel's agent runtimes. It does **not** vendor Myk's code, spec text, conformance vectors, or Chorus implementation. If this project grows toward real substrate compatibility, the next step is explicit upstream alignment and permission/license review instead of casually copying the goods. 🧾
+This repo is a Pi/client adapter and network-canary harness built from scratch around Joel's agent runtimes. It does **not** vendor Myk's code, spec text, conformance vectors, or Chorus implementation. Real substrate behavior should come from an upstream Chorus/Rhizomatic service, not from copying the goods. 🧾
 
 ## What ships in v0
 
 - Pi extension with first-class `rhizomatic_*` tools for a Rhizomatic-inspired agent-memory primitive set
-- Effect-authored schemas for the Rhizomatic Service Contract
-- generated OpenAPI (`pi-rhizomatic openapi`)
+- Effect-authored schemas for the adapter-facing Rhizomatic Service Contract
+- generated OpenAPI (`pi-rhizomatic openapi`) for the local/reference HTTP façade
 - HTTP client helpers and config loading
-- local reference HTTP service (`pi-rhizomatic serve`)
+- `chorus-http` backend adapter for Myk's Chorus streamable-HTTP MCP server
+- local reference HTTP service (`pi-rhizomatic serve`) for canary/dev only, not real Chorus semantics
 - generic Claude/Codex hook helpers
 - write-only outbox for mutating calls when the service is unavailable
 
@@ -42,13 +43,26 @@ No service URL is hardcoded. Resolution order:
 3. user `~/.pi/agent/rhizomatic.json`
 4. user/system `$XDG_CONFIG_HOME/rhizomatic/config.json` or `~/.config/rhizomatic/config.json`
 
-Example config:
+Example config for the local/reference façade:
 
 ```json
 {
   "serviceUrl": "http://127.0.0.1:7331",
+  "backend": "rhizomatic-http",
   "tokenEnv": "RHIZOMATIC_TOKEN",
   "outboxDir": "~/.rhizomatic/outbox"
+}
+```
+
+Example config for Myk's Chorus HTTP MCP server:
+
+```json
+{
+  "serviceUrl": "http://127.0.0.1:4821/mcp",
+  "backend": "chorus-http",
+  "tokenEnv": "RHIZOMATIC_TOKEN",
+  "outboxDir": "~/.rhizomatic/outbox",
+  "sessionDir": "~/.rhizomatic/mcp-sessions"
 }
 ```
 
@@ -56,16 +70,29 @@ Example config:
 
 ```bash
 pi-rhizomatic init
-pi-rhizomatic init --write --service-url http://127.0.0.1:7331
+pi-rhizomatic init --write --service-url http://127.0.0.1:4821/mcp --backend chorus-http
 ```
 
-## Local reference service
+## Backends
+
+### Chorus HTTP adapter
+
+The real adapter path is `backend: "chorus-http"`. It speaks MCP streamable HTTP to Myk's Chorus server (`npm run chorus:http` in `mbilokonsky/rhizomatic/apps/chorus`) and maps the Pi-facing primitives onto Chorus tools.
+
+Important behavior:
+
+- `begin-session`, `remember`, `recall`, `briefing`, `end-session`, `same`, `retract`, `revise`, `recast`, `post`, `inbox`, `ack`, `decide`, `replay`, `explain`, `trust`, and `as-of` call Chorus tools.
+- MCP session IDs are cached under `sessionDir` so separate hook processes can keep talking to the same Chorus author/session.
+- `recall { query }` maps to Chorus `search`; `recall { about/entity }` maps to Chorus `recall`.
+- adapter-only `kind: "canary" | "summary"` is normalized to Chorus `kind: "fact"`.
+
+### Local reference service
 
 ```bash
 pi-rhizomatic serve --store ./rhizomatic.jsonl --host 127.0.0.1 --port 7331
 ```
 
-The reference service is open by default on localhost. If you expose it beyond localhost, set `RHIZOMATIC_TOKEN` and clients should use the same token through env/secret references.
+The reference service is open by default on localhost. It is for canary/dev only and does not implement signed authors, policy lenses, contested facts, time travel, or Chorus semantics. If you expose it beyond localhost, set `RHIZOMATIC_TOKEN` and clients should use the same token through env/secret references.
 
 ## CLI examples
 

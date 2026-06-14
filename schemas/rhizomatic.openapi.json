@@ -1271,6 +1271,7 @@
               "kind": {
                 "type": "string",
                 "enum": [
+                  "observation",
                   "fact",
                   "preference",
                   "task",

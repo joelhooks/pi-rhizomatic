@@ -1,3 +1,4 @@
+import { chorusCall, chorusContract, chorusHealth } from "./chorus-http.js";
 import { notConfiguredMessage, resolveConfig, type ResolvedConfig } from "./config.js";
 import { MutatingPrimitives, enqueueOutbox, listOutbox, removeOutboxItem, updateOutboxFailure } from "./outbox.js";
 import { PrimitiveNames, type PrimitiveName, validateToolResponse, type ToolResponse } from "./schema.js";
@@ -26,12 +27,14 @@ export class RhizomaticClient {
 
   async health() {
     if (!this.config.serviceUrl) throw new RhizomaticNotConfiguredError(notConfiguredMessage(this.config));
+    if (this.config.backend === "chorus-http") return chorusHealth(this.config);
     const response = await fetch(new URL("/health", this.config.serviceUrl));
     return response.json();
   }
 
   async contract() {
     if (!this.config.serviceUrl) throw new RhizomaticNotConfiguredError(notConfiguredMessage(this.config));
+    if (this.config.backend === "chorus-http") return chorusContract(this.config);
     const response = await fetch(new URL("/contract", this.config.serviceUrl));
     return response.json();
   }
@@ -54,6 +57,8 @@ export class RhizomaticClient {
     }
 
     try {
+      if (this.config.backend === "chorus-http") return await chorusCall(this.config, primitive, input);
+
       const url = new URL(`/v0/tools/${primitive}`, this.config.serviceUrl);
       const response = await fetch(url, {
         method: "POST",

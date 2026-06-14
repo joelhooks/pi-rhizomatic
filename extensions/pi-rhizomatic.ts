@@ -20,6 +20,7 @@ function parseCommand(args: string): { command: string; rest: string } {
 
 export default function piRhizomatic(pi: ExtensionAPI) {
   let lifecycleStarted = false;
+  let currentRuntimeSessionId: string | undefined;
 
   for (const primitive of PrimitiveNames) {
     pi.registerTool({
@@ -32,7 +33,10 @@ export default function piRhizomatic(pi: ExtensionAPI) {
         const client = RhizomaticClient.fromCwd(ctx.cwd);
         const toolPrimitive = primitiveFromToolName(toolNameFromPrimitive(primitive));
         if (!toolPrimitive) throw new Error(`Unknown Rhizomatic tool: ${primitive}`);
-        const result = await client.call(toolPrimitive, params, { queueOnFailure: true });
+        const runtimeParams = currentRuntimeSessionId && !("runtimeSessionId" in params)
+          ? { runtime: "pi", runtimeSessionId: currentRuntimeSessionId, ...params }
+          : params;
+        const result = await client.call(toolPrimitive, runtimeParams, { queueOnFailure: true });
         return {
           content: [{ type: "text", text: summarize(result) }],
           details: { primitive: toolPrimitive, ok: result.ok, receipt: result.receipt },
@@ -94,8 +98,6 @@ export default function piRhizomatic(pi: ExtensionAPI) {
   pi.on("session_start", () => {
     lifecycleStarted = false;
   });
-
-  let currentRuntimeSessionId: string | undefined;
 
   pi.on("before_agent_start", async (event, ctx) => {
     if (lifecycleStarted) return { systemPrompt: event.systemPrompt };
